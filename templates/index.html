@@ -1,0 +1,102 @@
+<html>
+<head>
+	<link rel="icon" href='{{ url_for("static", filename = "img/title.gif") }}'>
+	<title>Emotion-Detection</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<style>
+		.margin{
+			margin-left: 150px;
+			margin-right: 150px;
+		}
+		.button {
+		  border-radius: 4px;
+		  background-color: green;
+		  border: none;
+		  color: #FFFFFF;
+		  text-align: center;
+		  font-size: 18px;
+		  padding: 20px;
+		  width: 150px;
+		  transition: all 0.5s;
+		  cursor: pointer;
+		  margin: 5px;
+		}
+
+		.button span {
+		  cursor: pointer;
+		  display: inline-block;
+		  position: relative;
+		  transition: 0.5s;
+		}
+
+		.button span:after {
+		  content: '\00bb';
+		  position: absolute;
+		  opacity: 0;
+		  top: 0;
+		  right: -20px;
+		  transition: 0.5s;
+		}
+
+		.button:hover span {
+		  padding-right: 25px;
+		}
+
+		.button:hover span:after {
+		  opacity: 1;
+		  right: 0;
+		}
+	</style>
+</head>
+<body>
+	<center><i><h2>Emotion Detection</h2></i></center>
+		<div class="container mt-5">
+			<div class = "margin")
+			<div class = "row">
+			<div class="form-group">
+<!--				action dari form ini akan mengirimkan data yang dari inputan textarea yang akan masuk ke dalam function detection yang ada di testFlask.py-->
+				<form method = "POST" action = '{{ url_for("detection") }}'>
+					<label>Insert Comment</label><br>
+					<textarea style="resize:none;width:800px;height:210px;" rows = 5 cols = 50 name = "komentar" placeholder = "Insert Comment"></textarea><br>
+					<center><button type = "submit" class = "button" value="Submit" data-toggle="tooltip" data-placement="right" title='yuk, Cari Tau persen emotion'><span>Submit</span></button></center>
+				</form>
+			</div>
+		{% if hasil != null %}
+			<p>komentar "<i>{{ komen }}</i>" ini adalah komentar yang <b>{{ hasil }}</b></p>
+			<center>
+			<table class="ml-4">
+				<tr>
+					<th style="text-align:center">Happy</th>
+					<th style="text-align:center">Sad</th>
+					<th style="text-align:center">Fear</th>
+					<th style="text-align:center">Angry</th>
+					<th style="text-align:center">Surprise</th>
+				</tr>
+				<tr>
+					<td><img src="{{ url_for('static', filename = 'img/happy.gif') }}" width=100 height=100></td>
+					<td><img src="{{ url_for('static', filename = 'img/sad.gif') }}" width=100 height=100></td>
+					<td><img src="{{ url_for('static', filename = 'img/fear.gif') }}" width=100 height=100></td>
+					<td><img src="{{ url_for('static', filename = 'img/angry.gif') }}" width=100 height=100></td>
+					<td><img src="{{ url_for('static', filename = 'img/surprise.gif') }}" width=100 height=100></td>
+				</tr>
+				<tr>
+					<td style="text-align:center">{{ percent_emotion['Happy'] }}%</td>
+					<td style="text-align:center">{{ percent_emotion['Sad'] }}%</td>
+					<td style="text-align:center">{{ percent_emotion['Fear'] }}%</td>
+					<td style="text-align:center">{{ percent_emotion['Angry'] }}%</td>
+					<td style="text-align:center">{{ percent_emotion['Surprise'] }}%</td>
+				</tr>
+			</table>
+
+			<div id="pie_chart">
+				<embed type="image/svg+xml" src= {{ chart|safe }} />
+			</div>
+			</center>
+			</div>
+		</div>
+		{% endif %}
+		</div>
+	</body>
+
+</html>
